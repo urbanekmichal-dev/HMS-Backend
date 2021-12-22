@@ -19,7 +19,8 @@ import pl.wasko.internships.HotelManagmentSystem.Securityy.exceptions.SpringRedd
 import pl.wasko.internships.HotelManagmentSystem.Securityy.model.NotificationEmail;
 import pl.wasko.internships.HotelManagmentSystem.Securityy.model.User;
 import pl.wasko.internships.HotelManagmentSystem.Securityy.model.VerificationToken;
-import pl.wasko.internships.HotelManagmentSystem.Securityy.repository.UserRepository;
+
+import pl.wasko.internships.HotelManagmentSystem.Securityy.repository.UserRepositoryy;
 import pl.wasko.internships.HotelManagmentSystem.Securityy.repository.VerificationTokenRepository;
 import pl.wasko.internships.HotelManagmentSystem.Securityy.security.JwtProvider;
 
@@ -34,7 +35,7 @@ import java.util.UUID;
 public class AuthService {
 
     private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
+    private final UserRepositoryy userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
     private final AuthenticationManager authenticationManager;
@@ -49,13 +50,18 @@ public class AuthService {
         user.setCreated(Instant.now());
         user.setEnabled(false);
 
+        user.setFirstname(registerRequest.getFirstname());
+        user.setLastname(registerRequest.getLastname());
+        user.setPhone(registerRequest.getPhone());
+        user.setAddress(registerRequest.getAddress());
+
         userRepository.save(user);
 
         String token = generateVerificationToken(user);
         mailService.sendMail(new NotificationEmail("Please Activate your Account",
-                user.getEmail(), "Thank you for signing up to Spring Reddit, " +
+                user.getEmail(), "Thank you for signing up to HotelManagementSystem, " +
                 "please click on the below url to activate your account : " +
-                "http://localhost:8080/api/auth/accountVerification/" + token));
+                "http://localhost:8083/api/auth/accountVerification/" + token));
     }
 
     @Transactional(readOnly = true)

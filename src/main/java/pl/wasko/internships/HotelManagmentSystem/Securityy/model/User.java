@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -18,6 +19,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "Userr")
 public class User {
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -31,4 +33,12 @@ public class User {
     private String email;
     private Instant created;
     private boolean enabled;
+    @NotBlank(message = "Firstname is required")
+    private String firstname;
+    @NotBlank(message = "Lastname is required")
+    private String lastname;
+    @NotBlank(message = "Phone is required")
+    private String phone;
+    @NotBlank(message = "Address is required")
+    private String address;
 }

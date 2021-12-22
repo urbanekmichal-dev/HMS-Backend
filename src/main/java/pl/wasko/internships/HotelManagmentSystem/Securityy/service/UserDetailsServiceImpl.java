@@ -10,7 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wasko.internships.HotelManagmentSystem.Securityy.model.User;
-import pl.wasko.internships.HotelManagmentSystem.Securityy.repository.UserRepository;
+import pl.wasko.internships.HotelManagmentSystem.Securityy.repository.UserRepositoryy;
+
 
 import java.util.Collection;
 import java.util.Optional;
@@ -20,7 +21,7 @@ import static java.util.Collections.singletonList;
 @Service
 @AllArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final UserRepository userRepository;
+    private final UserRepositoryy userRepository;
 
     @Override
     @Transactional(readOnly = true)
