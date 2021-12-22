@@ -38,11 +38,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/auth/**")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/subreddit")
+                .antMatchers(HttpMethod.GET, "/api/bookings/")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/posts/")
+                .antMatchers(HttpMethod.GET, "/api/rooms/")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/posts/**")
+                .antMatchers(HttpMethod.GET, "/api/users/**")
+                .permitAll()
+                .antMatchers(HttpMethod.GET, "/api/payments/**")
                 .permitAll()
                 .antMatchers("/v2/api-docs",
                         "/configuration/ui",

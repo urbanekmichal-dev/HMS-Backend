@@ -18,7 +18,7 @@ import java.text.ParseException;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/bookings")
+@RequestMapping(path = "/api/bookings")
 public class BookingController {
 
     private final BookingService bookingService;

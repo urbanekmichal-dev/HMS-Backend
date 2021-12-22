@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "payments")
+@RequestMapping(path = "/api/payments")
 public class PaymentController {
     private final PaymentServiceImpl paymentServiceImpl;
 

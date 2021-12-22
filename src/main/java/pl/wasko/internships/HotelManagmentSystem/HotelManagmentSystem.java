@@ -3,15 +3,20 @@ package pl.wasko.internships.HotelManagmentSystem;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import pl.wasko.internships.HotelManagmentSystem.Securityy.config.SwaggerConfiguration;
 
 import java.util.Arrays;
 
 @SpringBootApplication
+@EnableAsync
+@Import(SwaggerConfiguration.class)
 @RestController
 public class HotelManagmentSystem {
 
@@ -19,16 +24,6 @@ public class HotelManagmentSystem {
 		SpringApplication.run(HotelManagmentSystem.class, args);
 	}
 
-
-
-	@GetMapping(path = "/hello")
-	public String hello(){
-		return "Hello";
-	}
-	@GetMapping(path = "/hello2")
-	public String hello2(){
-		return "Hello2";
-	}
 
 	@Bean
 	public CorsFilter corsFilter() {
