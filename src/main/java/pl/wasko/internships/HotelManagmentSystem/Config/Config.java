@@ -40,21 +40,25 @@ public class Config {
             RoomEntity single = new RoomEntity(
                     "APARTMENT",
                     1,
-                    399.99);
+                    399.99,
+                    "https://i.ibb.co/GQT17Xf/24trending-shophotels1-super-Jumbo.jpg");
 
             RoomEntity doublee = new RoomEntity(
                     "STUDIO",
                     2,
-                    199.99);
+                    199.99,
+                    "https://empire-s3-production.bobvila.com/pages/538/original/Bedroom.jpg");
 
             RoomEntity pentHouse = new RoomEntity(
                     "PENTHOUSE",
                     3,
-                    499.40);
+                    499.40,
+                    "https://cdn.pixabay.com/photo/2019/12/16/15/43/room-4699578_960_720.jpg");
             RoomEntity zaebisty = new RoomEntity(
                     "DOUBLE",
                     4,
-                    299.99);
+                    299.99,
+                    "https://www.reviewpro.com/wp-content/uploads/2019/05/Hotel-deckchairs-vierw.jpeg");
 
             UserEntity michal = new UserEntity(
                 "Michał",

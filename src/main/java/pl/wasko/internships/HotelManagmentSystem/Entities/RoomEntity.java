@@ -23,18 +23,18 @@ public class RoomEntity {
     private String roomType;
     private Integer floor;
     private Double price;
+    private String picture;
 
     @JsonManagedReference
     @OneToMany(mappedBy="room",cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<BookingEntity> bookings = new ArrayList<>();
 
 
-
-
-    public RoomEntity(String type, Integer floor, Double price) {
+    public RoomEntity(String type, Integer floor, Double price,String picture) {
         this.roomType = type;
         this.floor = floor;
         this.price = price;
+        this.picture = picture;
     }
 
 }

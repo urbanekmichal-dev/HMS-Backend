@@ -18,4 +18,9 @@ public class RoomDtoPost {
 
     @NotNull(message = "Price cannot be an empty value")
     private Double price;
+
+    @NotNull(message = "Picture cannot be an empty value")
+    private String picture;
+
+
 }

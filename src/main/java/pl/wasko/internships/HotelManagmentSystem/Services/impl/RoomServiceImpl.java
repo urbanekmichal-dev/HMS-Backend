@@ -34,6 +34,7 @@ public class RoomServiceImpl implements RoomService {
         roomEntity.setRoomType(roomDtoPost.getRoomType());
         roomEntity.setFloor(roomDtoPost.getFloor());
         roomEntity.setPrice(roomDtoPost.getPrice());
+        roomEntity.setPicture(roomDtoPost.getPicture());
 
         return roomMapper.roomToDto(roomRepository.save(roomEntity));
 
