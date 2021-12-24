@@ -1,12 +1,16 @@
 package pl.wasko.internships.HotelManagmentSystem.Services.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import pl.wasko.internships.HotelManagmentSystem.DTO.RoomDTO.RoomDtoGet;
 import pl.wasko.internships.HotelManagmentSystem.DTO.RoomDTO.RoomDtoPost;
 import pl.wasko.internships.HotelManagmentSystem.Exceptions.BookingNotFoundException;
 import pl.wasko.internships.HotelManagmentSystem.Entities.RoomEntity;
 import pl.wasko.internships.HotelManagmentSystem.Exceptions.RoomNotFoundException;
 import pl.wasko.internships.HotelManagmentSystem.Mappers.RoomMapper;
+import pl.wasko.internships.HotelManagmentSystem.PagingSortingFiltration.Repository.RoomCriteriaRepository;
+import pl.wasko.internships.HotelManagmentSystem.PagingSortingFiltration.model.RoomPage;
+import pl.wasko.internships.HotelManagmentSystem.PagingSortingFiltration.model.RoomSearchCriteria;
 import pl.wasko.internships.HotelManagmentSystem.Repositories.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,12 +25,29 @@ import java.util.Objects;
 public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
     private final RoomMapper roomMapper;
+    private final RoomCriteriaRepository roomCriteriaRepository;
 
 
     public List<RoomDtoGet> getRooms() {
         return roomMapper.roomsToDTO(roomRepository.findAll());
 
     }
+    /////////////////////////////////////////////////////////////////////
+    public List<RoomDtoGet> getRooms(RoomPage roomPage, RoomSearchCriteria roomSearchCriteria)
+    {
+        Page<RoomEntity>  roomEntityPage= roomCriteriaRepository.findAllWithFilters(roomPage,roomSearchCriteria) ;
+        List<RoomEntity> roomEntityList = roomEntityPage.getContent();
+        return roomMapper.roomsToDTO(roomEntityList);
+    }
+
+    public RoomEntity addRoom(RoomEntity roomEntity){
+
+
+        return roomRepository.save(roomEntity);
+    }
+
+
+    /////////////////////////////////////////////////////////////////////
 
     @Transactional
     public RoomDtoGet addRoom(RoomDtoPost roomDtoPost) {
