@@ -33,6 +33,15 @@ public class BookingController {
         return new ResponseEntity<>(bookingService.getBookings(), HttpStatus.OK);
     }
 
+    @GetMapping("/room/{id}")
+    public ResponseEntity<List<BookingDtoGet>> getBookingsByRoomId(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(bookingService.getBookingsByRoomId(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<BookingDtoGet>> getBookingsByUserId(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(bookingService.getBookingsByRoomId(id), HttpStatus.OK);
+    }
 
     @PostMapping("/")
     public ResponseEntity<BookingDtoGet> addBooking(@RequestBody BookingDtoPost bookingDtoPost) throws Exception {

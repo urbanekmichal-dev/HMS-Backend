@@ -41,4 +41,5 @@ public class User {
     private String phone;
     @NotBlank(message = "Address is required")
     private String address;
+    private Role role;
 }

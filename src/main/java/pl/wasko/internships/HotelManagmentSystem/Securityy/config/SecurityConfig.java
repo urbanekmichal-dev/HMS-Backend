@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import pl.wasko.internships.HotelManagmentSystem.Securityy.model.Role;
 import pl.wasko.internships.HotelManagmentSystem.Securityy.security.JwtAuthenticationFilter;
 
 
@@ -38,8 +39,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/auth/**")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/bookings/")
-                .permitAll()
+//                .antMatchers(HttpMethod.GET, "/api/bookings/**")
+//                .permitAll()
+//                .antMatchers(HttpMethod.POST, "/api/bookings/")
+//                .permitAll()
                 .antMatchers(HttpMethod.GET, "/api/rooms/**")
                 .permitAll().
                 antMatchers( HttpMethod.POST, "/api/rooms/**")
@@ -48,6 +51,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(HttpMethod.GET, "/api/payments/**")
                 .permitAll()
+                //.antMatchers( "/api/bookings/**").hasAnyAuthority("USER")
+                .antMatchers( "/api/bookings/**").permitAll()
                 .antMatchers("/v2/api-docs",
                         "/configuration/ui",
                         "/swagger-resources/**",
@@ -57,8 +62,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .anyRequest()
                 .authenticated();
+
         httpSecurity.addFilterBefore(jwtAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class);
+
     }
 
     @Autowired

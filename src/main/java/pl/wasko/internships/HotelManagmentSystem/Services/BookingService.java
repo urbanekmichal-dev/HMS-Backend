@@ -16,4 +16,6 @@ public interface BookingService {
     List<BookingDtoGet> getBookings();
     BookingEntity findBookingById(Long id) throws BookingNotFoundException;
     void deleteBooking(Long id) throws BookingNotFoundException;
+    List<BookingDtoGet> getBookingsByRoomId(Long id);
+    List<BookingDtoGet> getBookingsByUserId(Long id);
 }

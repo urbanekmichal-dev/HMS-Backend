@@ -17,6 +17,7 @@ import pl.wasko.internships.HotelManagmentSystem.Securityy.dto.RefreshTokenReque
 import pl.wasko.internships.HotelManagmentSystem.Securityy.dto.RegisterRequest;
 import pl.wasko.internships.HotelManagmentSystem.Securityy.exceptions.SpringRedditException;
 import pl.wasko.internships.HotelManagmentSystem.Securityy.model.NotificationEmail;
+import pl.wasko.internships.HotelManagmentSystem.Securityy.model.Role;
 import pl.wasko.internships.HotelManagmentSystem.Securityy.model.User;
 import pl.wasko.internships.HotelManagmentSystem.Securityy.model.VerificationToken;
 
@@ -54,6 +55,7 @@ public class AuthService {
         user.setLastname(registerRequest.getLastname());
         user.setPhone(registerRequest.getPhone());
         user.setAddress(registerRequest.getAddress());
+        user.setRole(Role.values()[registerRequest.getRole()]);
 
         userRepository.save(user);
 
@@ -99,11 +101,13 @@ public class AuthService {
                 loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String token = jwtProvider.generateToken(authenticate);
+        User user = userRepository.findByUsername(loginRequest.getUsername()).orElseThrow(() -> new SpringRedditException("User not found with name - " + loginRequest.getUsername()));
         return AuthenticationResponse.builder()
                 .authenticationToken(token)
                 .refreshToken(refreshTokenService.generateRefreshToken().getToken())
                 .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
                 .username(loginRequest.getUsername())
+                .userId((user.getUserId()))
                 .build();
     }
 

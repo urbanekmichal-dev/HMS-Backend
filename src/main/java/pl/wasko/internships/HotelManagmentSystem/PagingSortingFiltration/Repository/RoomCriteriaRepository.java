@@ -83,4 +83,5 @@ public class RoomCriteriaRepository {
         }
         return criteriaBuilder.and(predicateList.toArray(new Predicate[0]));
     }
+
 }

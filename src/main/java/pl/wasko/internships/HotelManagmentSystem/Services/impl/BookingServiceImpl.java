@@ -47,6 +47,13 @@ public class BookingServiceImpl implements BookingService {
         return bookingMapper.bookingsToDTO(bookingRepository.findAll());
     }
 
+    public List<BookingDtoGet> getBookingsByRoomId(Long id){
+        return bookingMapper.bookingsToDTO(bookingRepository.findBookingsByRoomId(id));
+    }
+
+    public List<BookingDtoGet> getBookingsByUserId(Long id){
+        return bookingMapper.bookingsToDTO(bookingRepository.findBookingsByUserId(id));
+    }
 
     @Transactional
     public BookingDtoGet addBooking(BookingDtoPost bookingDtoPost) throws Exception {
@@ -146,8 +153,6 @@ public class BookingServiceImpl implements BookingService {
     }
 
 
-
-    
 
 
 }

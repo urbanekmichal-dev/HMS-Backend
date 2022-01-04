@@ -21,14 +21,14 @@ public class Config {
                                         RoleRepository roleRepository) {
         return args -> {
             BookingEntity booking1 = new BookingEntity(
-                    LocalDate.of(2021, 12, 10),
-                    LocalDate.of(2021, 12, 13));
+                    LocalDate.of(2022, 1, 1),
+                    LocalDate.of(2022, 1, 5));
             BookingEntity booking2 = new BookingEntity(
-                    LocalDate.of(2019, 12, 10),
-                    LocalDate.of(2019, 12, 12));
+                    LocalDate.of(2022, 1, 7),
+                    LocalDate.of(2022, 1, 15));
             BookingEntity booking3 = new BookingEntity(
-                    LocalDate.of(2018, 12, 10),
-                    LocalDate.of(2018, 11, 12));
+                    LocalDate.of(2022, 1, 18),
+                    LocalDate.of(2022, 1, 25));
 
             BookingEntity booking4 = new BookingEntity(
                     LocalDate.of(2017, 12, 10),
@@ -41,24 +41,47 @@ public class Config {
                     "APARTMENT",
                     1,
                     399.99,
-                    "https://i.ibb.co/GQT17Xf/24trending-shophotels1-super-Jumbo.jpg");
+                    "https://i.ibb.co/GQT17Xf/24trending-shophotels1-super-Jumbo.jpg",
+                    2,
+                    1,
+                    1,
+                    "Radzionków",
+                    "Piekny domek :)"
+                    );
 
             RoomEntity doublee = new RoomEntity(
                     "STUDIO",
                     2,
                     199.99,
-                    "https://empire-s3-production.bobvila.com/pages/538/original/Bedroom.jpg");
+                    "https://empire-s3-production.bobvila.com/pages/538/original/Bedroom.jpg",
+                    2,
+                    1,
+                    1,
+                    "Zbrosłąwice",
+                    "Piekny apartament :)"
+            );
 
             RoomEntity pentHouse = new RoomEntity(
                     "PENTHOUSE",
                     3,
                     499.40,
-                    "https://cdn.pixabay.com/photo/2019/12/16/15/43/room-4699578_960_720.jpg");
+                    "https://cdn.pixabay.com/photo/2019/12/16/15/43/room-4699578_960_720.jpg",
+                    2,
+                    1,
+                    2,
+                    "Gliwice",
+                    "Czysty penthouse"
+            );
             RoomEntity zaebisty = new RoomEntity(
                     "DOUBLE",
                     4,
                     299.99,
-                    "https://www.reviewpro.com/wp-content/uploads/2019/05/Hotel-deckchairs-vierw.jpeg");
+                    "https://www.reviewpro.com/wp-content/uploads/2019/05/Hotel-deckchairs-vierw.jpeg",
+                    2,
+                    1,
+                    2,
+                    "Gliwice",
+                    "Nawet nie pytaj  :D");
 
             UserEntity michal = new UserEntity(
                 "Michał",
