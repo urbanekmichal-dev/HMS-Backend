@@ -1,13 +1,13 @@
 package pl.wasko.internships.HotelManagmentSystem.Config;
 
-import org.apache.catalina.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import pl.wasko.internships.HotelManagmentSystem.Entities.*;
 import pl.wasko.internships.HotelManagmentSystem.Repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+import pl.wasko.internships.HotelManagmentSystem.Securityy.model.User;
+import pl.wasko.internships.HotelManagmentSystem.Securityy.repository.UserRepositoryy;
 
 
 import java.time.LocalDate;
@@ -38,11 +38,11 @@ public class Config {
                     LocalDate.of(2016, 12, 10),
                     LocalDate.of(2016, 11, 12));
             RoomEntity single = new RoomEntity(
-                    "APARTMENT",
+                    "Dom",
                     1,
                     399.99,
                     "https://i.ibb.co/GQT17Xf/24trending-shophotels1-super-Jumbo.jpg",
-                    2,
+                    1,
                     1,
                     1,
                     "Radzionków",
@@ -50,19 +50,19 @@ public class Config {
                     );
 
             RoomEntity doublee = new RoomEntity(
-                    "STUDIO",
+                    "Apartemnt",
                     2,
                     199.99,
                     "https://empire-s3-production.bobvila.com/pages/538/original/Bedroom.jpg",
                     2,
                     1,
                     1,
-                    "Zbrosłąwice",
+                    "Zbrosławice",
                     "Piekny apartament :)"
             );
 
             RoomEntity pentHouse = new RoomEntity(
-                    "PENTHOUSE",
+                    "Penthouse",
                     3,
                     499.40,
                     "https://cdn.pixabay.com/photo/2019/12/16/15/43/room-4699578_960_720.jpg",
@@ -72,16 +72,19 @@ public class Config {
                     "Gliwice",
                     "Czysty penthouse"
             );
+
+
+
             RoomEntity zaebisty = new RoomEntity(
-                    "DOUBLE",
+                    "Podwójny pokój",
                     4,
                     299.99,
                     "https://www.reviewpro.com/wp-content/uploads/2019/05/Hotel-deckchairs-vierw.jpeg",
-                    2,
+                    3,
                     1,
                     2,
                     "Gliwice",
-                    "Nawet nie pytaj  :D");
+                    "Zadbana okolica i inne");
 
             UserEntity michal = new UserEntity(
                 "Michał",

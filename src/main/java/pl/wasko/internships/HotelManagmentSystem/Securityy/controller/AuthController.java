@@ -2,12 +2,15 @@ package pl.wasko.internships.HotelManagmentSystem.Securityy.controller;
 
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.wasko.internships.HotelManagmentSystem.Securityy.dto.AuthenticationResponse;
-import pl.wasko.internships.HotelManagmentSystem.Securityy.dto.LoginRequest;
-import pl.wasko.internships.HotelManagmentSystem.Securityy.dto.RefreshTokenRequest;
-import pl.wasko.internships.HotelManagmentSystem.Securityy.dto.RegisterRequest;
+import pl.wasko.internships.HotelManagmentSystem.DTO.UserDTO.UserDtoGet;
+import pl.wasko.internships.HotelManagmentSystem.DTO.UserDTO.UserDtoPost;
+import pl.wasko.internships.HotelManagmentSystem.Exceptions.BookingNotFoundException;
+import pl.wasko.internships.HotelManagmentSystem.Exceptions.RoleNotFoundException;
+import pl.wasko.internships.HotelManagmentSystem.Exceptions.UserNotFoundException;
+import pl.wasko.internships.HotelManagmentSystem.Securityy.dto.*;
 import pl.wasko.internships.HotelManagmentSystem.Securityy.service.AuthService;
 import pl.wasko.internships.HotelManagmentSystem.Securityy.service.RefreshTokenService;
 
@@ -52,6 +55,17 @@ public class AuthController {
         return ResponseEntity.status(OK).body("Refresh Token Deleted Successfully!!");
     }
 
+    @GetMapping(path = "/{username}")
+    public ResponseEntity<UserResponse> getUserByUsername(@PathVariable("username") String username) throws BookingNotFoundException {
+        return new ResponseEntity<>( authService.getUserByUsername(username), HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/")
+    public ResponseEntity<UserResponse> updateUserBody(
+            @RequestBody UserResponse userDtoPost) throws UserNotFoundException {
+        UserResponse updateUser = authService.updateUser(userDtoPost);
+        return new ResponseEntity<>(updateUser, HttpStatus.OK);
+    }
 
 
 

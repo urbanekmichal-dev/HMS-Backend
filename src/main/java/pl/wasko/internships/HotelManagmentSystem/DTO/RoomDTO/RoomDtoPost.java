@@ -1,6 +1,7 @@
 package pl.wasko.internships.HotelManagmentSystem.DTO.RoomDTO;
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 @Getter
@@ -36,6 +37,7 @@ public class RoomDtoPost {
 
     @NotNull(message = "Description cannot be an empty value")
     private String description;
+
 
 
 }

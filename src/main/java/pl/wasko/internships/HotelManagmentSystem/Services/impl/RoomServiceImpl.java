@@ -2,6 +2,7 @@ package pl.wasko.internships.HotelManagmentSystem.Services.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.util.StringUtils;
 import pl.wasko.internships.HotelManagmentSystem.DTO.RoomDTO.RoomDtoGet;
 import pl.wasko.internships.HotelManagmentSystem.DTO.RoomDTO.RoomDtoPost;
 import pl.wasko.internships.HotelManagmentSystem.Exceptions.BookingNotFoundException;
@@ -13,8 +14,12 @@ import pl.wasko.internships.HotelManagmentSystem.PagingSortingFiltration.model.R
 import pl.wasko.internships.HotelManagmentSystem.PagingSortingFiltration.model.RoomSearchCriteria;
 import pl.wasko.internships.HotelManagmentSystem.Repositories.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils.*;
 import org.springframework.stereotype.Service;
 import pl.wasko.internships.HotelManagmentSystem.Services.RoomService;
+import java.io.IOException;
+import java.util.Base64;
+import java.util.List;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -52,10 +57,18 @@ public class RoomServiceImpl implements RoomService {
     @Transactional
     public RoomDtoGet addRoom(RoomDtoPost roomDtoPost) {
         RoomEntity roomEntity = new RoomEntity();
+       
+
+
         roomEntity.setRoomType(roomDtoPost.getRoomType());
         roomEntity.setFloor(roomDtoPost.getFloor());
         roomEntity.setPrice(roomDtoPost.getPrice());
         roomEntity.setPicture(roomDtoPost.getPicture());
+        roomEntity.setAdults(roomDtoPost.getAdults());
+        roomEntity.setRoomsNumber(roomDtoPost.getRoomsNumber());
+        roomEntity.setChildren(roomDtoPost.getChildren());
+        roomEntity.setLocation(roomDtoPost.getLocation());
+        roomEntity.setDescription(roomDtoPost.getDescription());
 
         return roomMapper.roomToDto(roomRepository.save(roomEntity));
 
@@ -119,27 +132,4 @@ public class RoomServiceImpl implements RoomService {
 
 
 
-//    @Transactional
-//    public void upadateRoom(Long room_id,
-//                            String type,
-//                            Integer floor,
-//                            Double price) {
-//        RoomEntity room = roomRepository.findById(room_id)
-//                .orElseThrow(() -> new IllegalStateException(
-//                        "room with id " + room_id + " does not exist!"
-//                ));
-//
-//
-//        if (floor != null &&
-//
-//                !Objects.equals((room.getFloor()), floor)) {
-//            room.setFloor(floor);
-//        }
-//
-//        if (price != null
-//                && !Objects.equals(room.getPrice(), price)) {
-//            room.setPrice(price);
-//        }
-//
-//    }
 }

@@ -42,4 +42,7 @@ public class User {
     @NotBlank(message = "Address is required")
     private String address;
     private Role role;
+    private String image;
+
+
 }

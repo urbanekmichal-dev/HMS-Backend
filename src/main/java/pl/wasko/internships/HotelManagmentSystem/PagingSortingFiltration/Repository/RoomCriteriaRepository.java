@@ -70,17 +70,42 @@ public class RoomCriteriaRepository {
 
     private Predicate getPredicate(RoomSearchCriteria roomSearchCriteria, Root<RoomEntity> roomEntityRoot) {
         List<Predicate> predicateList = new ArrayList<>();
-        if (Objects.nonNull(roomSearchCriteria.getFloor())) {
+//        if (Objects.nonNull(roomSearchCriteria.getFloor())) {
+//            predicateList.add(
+//                    criteriaBuilder.equal(roomEntityRoot.get("floor"),roomSearchCriteria.getFloor())
+//                   // criteriaBuilder.like(roomEntityRoot.get("floor"),  roomSearchCriteria.getFloor() + "%")
+//            );
+//        }
+//        if (Objects.nonNull(roomSearchCriteria.getRoomType())) {
+//            predicateList.add(
+//                    criteriaBuilder.like(roomEntityRoot.get("roomType"), "%" + roomSearchCriteria.getRoomType() + "%")
+//            );
+//        }
+        if (Objects.nonNull(roomSearchCriteria.getLocation())) {
             predicateList.add(
-                    criteriaBuilder.equal(roomEntityRoot.get("floor"),roomSearchCriteria.getFloor())
-                   // criteriaBuilder.like(roomEntityRoot.get("floor"),  roomSearchCriteria.getFloor() + "%")
+                    criteriaBuilder.like(roomEntityRoot.get("location"), "%" + roomSearchCriteria.getLocation() + "%")
             );
         }
-        if (Objects.nonNull(roomSearchCriteria.getRoomType())) {
+
+        if (Objects.nonNull(roomSearchCriteria.getAdults())) {
             predicateList.add(
-                    criteriaBuilder.like(roomEntityRoot.get("roomType"), "%" + roomSearchCriteria.getRoomType() + "%")
+                    criteriaBuilder.greaterThanOrEqualTo(roomEntityRoot.get("adults"),roomSearchCriteria.getAdults())
             );
         }
+        if (Objects.nonNull(roomSearchCriteria.getChildren())) {
+            predicateList.add(
+                    criteriaBuilder.greaterThanOrEqualTo(roomEntityRoot.get("children"),roomSearchCriteria.getChildren())
+            );
+        }
+        if (Objects.nonNull(roomSearchCriteria.getRoomsNumber())) {
+            predicateList.add(
+                    criteriaBuilder.greaterThanOrEqualTo(roomEntityRoot.get("roomsNumber"),roomSearchCriteria.getRoomsNumber())
+            );
+        }
+
+
+
+
         return criteriaBuilder.and(predicateList.toArray(new Predicate[0]));
     }
 
