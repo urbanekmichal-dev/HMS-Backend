@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pl.wasko.internships.HotelManagmentSystem.Images.services.StorageService;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/file")
 public class StorageController {
@@ -17,9 +19,12 @@ public class StorageController {
     private StorageService service;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam(value = "files") MultipartFile file) {
-        return new ResponseEntity<>(service.uploadFile(file), HttpStatus.OK);
+    public ResponseEntity<Map<String, String>> uploadFile(@RequestParam(value = "files") MultipartFile file) {
+       // return new ResponseEntity<>(service.uploadFile(file), HttpStatus.OK);
+        return ResponseEntity.ok().body(Map.of
+                ("name", service.uploadFile(file)));
     }
+
 
     @GetMapping("/download/{fileName}")
     public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable String fileName) {

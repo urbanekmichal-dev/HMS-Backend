@@ -40,7 +40,7 @@ public class BookingController {
 
     @GetMapping("/user/{id}")
     public ResponseEntity<List<BookingDtoGet>> getBookingsByUserId(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(bookingService.getBookingsByRoomId(id), HttpStatus.OK);
+        return new ResponseEntity<>(bookingService.getBookingsByUserId(id), HttpStatus.OK);
     }
 
     @PostMapping("/")

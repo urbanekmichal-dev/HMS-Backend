@@ -21,7 +21,7 @@ public class RoomEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "room_id")
     private Long id;
-    private String roomType;
+    private RoomType roomType;
     private Integer floor;
     private Double price;
     private String picture;
@@ -36,7 +36,7 @@ public class RoomEntity {
     private List<BookingEntity> bookings = new ArrayList<>();
 
 
-    public RoomEntity(String roomType, Integer floor, Double price, String picture,
+    public RoomEntity(RoomType roomType, Integer floor, Double price, String picture,
                       Integer adults, Integer roomsNumber, Integer children,
                       String location, String description) {
         this.roomType = roomType;

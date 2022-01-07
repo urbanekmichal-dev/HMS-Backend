@@ -1,15 +1,18 @@
 package pl.wasko.internships.HotelManagmentSystem.Config;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.wasko.internships.HotelManagmentSystem.Entities.*;
 import pl.wasko.internships.HotelManagmentSystem.Repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import pl.wasko.internships.HotelManagmentSystem.Securityy.model.Role;
 import pl.wasko.internships.HotelManagmentSystem.Securityy.model.User;
 import pl.wasko.internships.HotelManagmentSystem.Securityy.repository.UserRepositoryy;
 
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -18,7 +21,7 @@ public class Config {
 
     @Bean
     CommandLineRunner commandLineRunner(RoomRepository roomRepository, BookingRepository bookingRepository, UserRepository userRepository, PaymentRepository paymentRepository,
-                                        RoleRepository roleRepository) {
+                                        RoleRepository roleRepository,  PasswordEncoder passwordEncoder) {
         return args -> {
             BookingEntity booking1 = new BookingEntity(
                     LocalDate.of(2022, 1, 1),
@@ -38,7 +41,7 @@ public class Config {
                     LocalDate.of(2016, 12, 10),
                     LocalDate.of(2016, 11, 12));
             RoomEntity single = new RoomEntity(
-                    "Dom",
+                    RoomType.ROOM,
                     1,
                     399.99,
                     "https://i.ibb.co/GQT17Xf/24trending-shophotels1-super-Jumbo.jpg",
@@ -50,7 +53,7 @@ public class Config {
                     );
 
             RoomEntity doublee = new RoomEntity(
-                    "Apartemnt",
+                    RoomType.FLAT,
                     2,
                     199.99,
                     "https://empire-s3-production.bobvila.com/pages/538/original/Bedroom.jpg",
@@ -62,7 +65,7 @@ public class Config {
             );
 
             RoomEntity pentHouse = new RoomEntity(
-                    "Penthouse",
+                    RoomType.FLAT,
                     3,
                     499.40,
                     "https://cdn.pixabay.com/photo/2019/12/16/15/43/room-4699578_960_720.jpg",
@@ -76,7 +79,7 @@ public class Config {
 
 
             RoomEntity zaebisty = new RoomEntity(
-                    "Podwójny pokój",
+                    RoomType.FLAT,
                     4,
                     299.99,
                     "https://www.reviewpro.com/wp-content/uploads/2019/05/Hotel-deckchairs-vierw.jpeg",
@@ -151,6 +154,47 @@ public class Config {
             RoleEnity customer = new RoleEnity("GUEST");
             RoleEnity superUser = new RoleEnity("WORKER");
 
+            User adminSystem = new User(
+                    "Kris1",
+                    passwordEncoder.encode("123"),
+                    "michal@wp.pl",
+                    Instant.now(),
+                    true,
+                    "Krzystof",
+                    "Urbanek",
+                    "234554",
+                    "sadad",
+                    Role.values()[1],
+                    "ffdfd"
+            );
+
+            User adminSystem1 = new User(
+                    "Kris2",
+                    passwordEncoder.encode("123"),
+                    "michal@wp.pl",
+                    Instant.now(),
+                    true,
+                    "Krzystof",
+                    "Urbanek",
+                    "234554",
+                    "asdad",
+                    Role.values()[1],
+                    "ffdfd"
+            );
+
+            User adminSystem2 = new User(
+                    "Kris3",
+                    passwordEncoder.encode("123"),
+                    "michal@wp.pl",
+                    Instant.now(),
+                    true,
+                    "Krzystof",
+                    "Urbanek",
+                    "234554",
+                    "ssdad",
+                    Role.values()[1],
+                    "ffdfd"
+            );
 
 
             ////TEST REZERWACJI
@@ -165,6 +209,7 @@ public class Config {
             booking1.setUser(michal);
             booking1.setRoom(single);
             booking1.setPayment(paymentEntity3);
+            booking1.setOwner(adminSystem);
             michal.getPayments().add(paymentEntity3);
             michal.getBookings().add(booking1);
             admin.getUsers().add(michal);
@@ -181,6 +226,7 @@ public class Config {
             booking2.setUser(krzysztof);
             booking2.setRoom(doublee);
             booking2.setPayment(paymentEntity1);
+            booking2.setOwner(adminSystem1);
             superUser.getUsers().add(krzysztof);
             paymentEntity1.setBooking(booking2);
             paymentEntity1.setUser(krzysztof);
@@ -192,6 +238,7 @@ public class Config {
             booking3.setRoom(zaebisty);
             booking3.setPayment(paymentEntity4);
             booking3.setUser(krzysztof);
+            booking3.setOwner(adminSystem2);
             zaebisty.getBookings().add(booking3);
             paymentEntity4.setUser(krzysztof);
             paymentEntity4.setBooking(booking3);

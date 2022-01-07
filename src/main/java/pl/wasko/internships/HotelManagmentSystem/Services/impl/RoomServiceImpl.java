@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
 import pl.wasko.internships.HotelManagmentSystem.DTO.RoomDTO.RoomDtoGet;
 import pl.wasko.internships.HotelManagmentSystem.DTO.RoomDTO.RoomDtoPost;
+import pl.wasko.internships.HotelManagmentSystem.Entities.RoomType;
 import pl.wasko.internships.HotelManagmentSystem.Exceptions.BookingNotFoundException;
 import pl.wasko.internships.HotelManagmentSystem.Entities.RoomEntity;
 import pl.wasko.internships.HotelManagmentSystem.Exceptions.RoomNotFoundException;
@@ -16,6 +17,7 @@ import pl.wasko.internships.HotelManagmentSystem.Repositories.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils.*;
 import org.springframework.stereotype.Service;
+import pl.wasko.internships.HotelManagmentSystem.Securityy.model.Role;
 import pl.wasko.internships.HotelManagmentSystem.Services.RoomService;
 import java.io.IOException;
 import java.util.Base64;
@@ -57,10 +59,8 @@ public class RoomServiceImpl implements RoomService {
     @Transactional
     public RoomDtoGet addRoom(RoomDtoPost roomDtoPost) {
         RoomEntity roomEntity = new RoomEntity();
-       
 
-
-        roomEntity.setRoomType(roomDtoPost.getRoomType());
+        roomEntity.setRoomType(RoomType.values()[roomDtoPost.getRoomType()] );
         roomEntity.setFloor(roomDtoPost.getFloor());
         roomEntity.setPrice(roomDtoPost.getPrice());
         roomEntity.setPicture(roomDtoPost.getPicture());
@@ -83,8 +83,8 @@ public class RoomServiceImpl implements RoomService {
 
         );
         if (roomDtoPost.getRoomType() != null &&
-                !Objects.equals(roomDtoPost.getRoomType(), roomEntity.getRoomType())) {
-            roomEntity.setRoomType(roomDtoPost.getRoomType());
+                !Objects.equals(RoomType.values()[roomDtoPost.getRoomType()], roomEntity.getRoomType())) {
+            roomEntity.setRoomType(RoomType.values()[roomDtoPost.getRoomType()]);
         }
 
         if (roomDtoPost.getFloor() != null &&

@@ -16,6 +16,9 @@ import pl.wasko.internships.HotelManagmentSystem.Mappers.BookingMapper;
 import pl.wasko.internships.HotelManagmentSystem.Repositories.BookingRepository;
 import org.springframework.stereotype.Service;
 import pl.wasko.internships.HotelManagmentSystem.Repositories.RoomRepository;
+import pl.wasko.internships.HotelManagmentSystem.Securityy.model.User;
+import pl.wasko.internships.HotelManagmentSystem.Securityy.repository.UserRepositoryy;
+import pl.wasko.internships.HotelManagmentSystem.Securityy.service.AuthService;
 import pl.wasko.internships.HotelManagmentSystem.Services.BookingService;
 import pl.wasko.internships.HotelManagmentSystem.Services.RoomService;
 import pl.wasko.internships.HotelManagmentSystem.Services.UserService;
@@ -40,6 +43,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final RoomService roomService;
     private final UserService userService;
+    private final AuthService authService;
     private final BookingMapper bookingMapper;
 
 
@@ -62,8 +66,9 @@ public class BookingServiceImpl implements BookingService {
         bookingEntity.setCheckIn(LocalDate.parse(bookingDtoPost.getCheckIn()));
         bookingEntity.setCheckOut(LocalDate.parse(bookingDtoPost.getCheckOut()));
 
-        RoomEntity roomEntity=roomService.findRoomById(Long.parseLong(bookingDtoPost.getRoom()));
-        UserEntity userEntity=userService.findUserById(Long.parseLong(bookingDtoPost.getUser()));
+        RoomEntity roomEntity=roomService.findRoomById(bookingDtoPost.getRoom().longValue());
+        UserEntity userEntity=userService.findUserById(bookingDtoPost.getUser().longValue());
+        User owner = authService.findUserById(bookingDtoPost.getOwner().longValue());
 
         paymentEntity.setDate(LocalDate.now());
         long days=daysBetween(bookingDtoPost.getCheckIn(),bookingDtoPost.getCheckOut());
@@ -80,6 +85,7 @@ public class BookingServiceImpl implements BookingService {
             bookingEntity.setUser(userEntity);
             bookingEntity.setRoom(roomEntity);
             bookingEntity.setPayment(paymentEntity);
+            bookingEntity.setOwner(owner);
             userEntity.getBookings().add(bookingEntity);
             userEntity.getPayments().add(paymentEntity);
             paymentEntity.setBooking(bookingEntity);

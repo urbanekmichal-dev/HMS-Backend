@@ -18,7 +18,7 @@ public interface BookingRepository
     @Query("Select b From BookingEntity b where b.room.id = ?1")
     List <BookingEntity> findBookingsByRoomId(Long room);
 
-    @Query("Select b From BookingEntity b where b.user.id = ?1")
+    @Query("Select b From BookingEntity b where b.owner.userId = ?1")
     List <BookingEntity> findBookingsByUserId(Long room);
 
 

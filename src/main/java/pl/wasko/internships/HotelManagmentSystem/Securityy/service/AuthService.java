@@ -182,5 +182,10 @@ public class AuthService {
         return customerMapper.userToDTO(userFind);
     }
 
+    public User findUserById(Long id) throws UserNotFoundException {
+
+        return userRepository.findUserById(id).orElseThrow(() -> new UserNotFoundException(
+                "User with id " + id + " does not exist")) ;
+    }
 
 }

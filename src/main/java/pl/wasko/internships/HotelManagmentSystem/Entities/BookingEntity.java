@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import pl.wasko.internships.HotelManagmentSystem.Securityy.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -42,6 +43,12 @@ public class BookingEntity {
     @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "payment_id", nullable = false)
     private PaymentEntity payment;
+
+    @ToString.Exclude
+    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
 
 
 

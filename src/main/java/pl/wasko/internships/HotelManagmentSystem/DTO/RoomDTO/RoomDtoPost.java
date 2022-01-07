@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 public class RoomDtoPost {
     private Long id;
     @NotNull(message = "Room type cannot be an empty value")
-    private String roomType;
+    private Integer roomType;
 
     @NotNull(message = "Floor cannot be an empty value")
     private Integer floor;
