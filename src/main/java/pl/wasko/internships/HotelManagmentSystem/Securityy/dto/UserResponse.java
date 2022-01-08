@@ -9,9 +9,11 @@ import pl.wasko.internships.HotelManagmentSystem.Securityy.model.Role;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserResponse {
+    private Integer userId;
     private String email;
     private String username;
     private String firstname;
+    private Boolean enabled;
     private String lastname;
     private String phone;
     private String address;

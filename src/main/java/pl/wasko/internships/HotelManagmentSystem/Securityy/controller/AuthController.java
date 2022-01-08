@@ -16,6 +16,8 @@ import pl.wasko.internships.HotelManagmentSystem.Securityy.service.RefreshTokenS
 
 import javax.validation.Valid;
 
+import java.util.List;
+
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -55,6 +57,8 @@ public class AuthController {
         return ResponseEntity.status(OK).body("Refresh Token Deleted Successfully!!");
     }
 
+    ////////////////////////////USER!!!!!!!!!!!!!!!!!
+
     @GetMapping(path = "/{username}")
     public ResponseEntity<UserResponse> getUserByUsername(@PathVariable("username") String username) throws BookingNotFoundException {
         return new ResponseEntity<>( authService.getUserByUsername(username), HttpStatus.OK);
@@ -62,11 +66,19 @@ public class AuthController {
 
     @PutMapping(path = "/")
     public ResponseEntity<UserResponse> updateUserBody(
-            @RequestBody UserResponse userDtoPost) throws UserNotFoundException {
+            @RequestBody RegisterRequest userDtoPost) throws UserNotFoundException {
         UserResponse updateUser = authService.updateUser(userDtoPost);
         return new ResponseEntity<>(updateUser, HttpStatus.OK);
     }
 
+    @GetMapping("/users/")
+    public ResponseEntity<List<UserResponse>> getUsers() {
+        return new ResponseEntity<>( authService.getUsers(), HttpStatus.OK);
+    }
 
+    @DeleteMapping(path = "/user/{id}")
+    public void deleteUser(@PathVariable("id") Long id) throws UserNotFoundException {
+        authService.deleteUser(id);
 
+    }
 }

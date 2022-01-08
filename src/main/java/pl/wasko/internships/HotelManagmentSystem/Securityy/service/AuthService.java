@@ -32,6 +32,7 @@ import pl.wasko.internships.HotelManagmentSystem.Securityy.security.JwtProvider;
 
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -67,6 +68,10 @@ public class AuthService {
         user.setRole(Role.values()[registerRequest.getRole()]);
         user.setImage(registerRequest.getImage());
 
+        boolean userExists = userRepository
+                .findByUsername(registerRequest.getUsername())
+                .isPresent();
+        if(userExists) throw new IllegalStateException("Username already taken");
 
         userRepository.save(user);
 
@@ -120,6 +125,7 @@ public class AuthService {
                 .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
                 .username(loginRequest.getUsername())
                 .userId((user.getUserId()))
+                .role(user.getRole())
                 .build();
     }
 
@@ -139,12 +145,14 @@ public class AuthService {
         return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
     }
 
+    ///////////////////////USER!!!!!!!!!!!!!!!!!!!!!!!!1
+
     public UserResponse getUserByUsername(String username) throws BookingNotFoundException {
         return customerMapper.userToDTO(userRepository.findByUsername(username).orElseThrow(
                 ()-> new BookingNotFoundException("User with username: "+ username +"was not found")));
     }
 
-    public UserResponse updateUser(UserResponse userResponse) throws UserNotFoundException {
+    public UserResponse updateUser(RegisterRequest userResponse) throws UserNotFoundException {
         User userFind=userRepository.findByUsername(userResponse.getUsername()) .orElseThrow(() -> new UserNotFoundException(
                 "User with username " + userResponse.getUsername() + " does not exist!"
         ));
@@ -186,6 +194,18 @@ public class AuthService {
 
         return userRepository.findUserById(id).orElseThrow(() -> new UserNotFoundException(
                 "User with id " + id + " does not exist")) ;
+    }
+
+    public List<UserResponse> getUsers() {
+        return customerMapper.usersToDTO(userRepository.findAll());
+    }
+
+
+    public void deleteUser(Long id) throws UserNotFoundException {
+        User exist = userRepository.findUserById(id).orElseThrow(() -> new UserNotFoundException(
+                "User with id " + id + " does not exist"));
+        exist.setEnabled(!exist.getEnabled());
+        userRepository.save(exist);
     }
 
 }

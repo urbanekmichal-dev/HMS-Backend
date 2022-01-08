@@ -33,7 +33,7 @@ public class User {
     @NotEmpty(message = "Email is required")
     private String email;
     private Instant created;
-    private boolean enabled;
+    private Boolean enabled;
     @NotBlank(message = "Firstname is required")
     private String firstname;
     @NotBlank(message = "Lastname is required")

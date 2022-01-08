@@ -17,4 +17,5 @@ public interface UserRepositoryy extends JpaRepository<User, Long> {
 
     @Query("Select u From User u where u.userId = ?1")
     Optional<User> findUserById(Long userId);
+
 }

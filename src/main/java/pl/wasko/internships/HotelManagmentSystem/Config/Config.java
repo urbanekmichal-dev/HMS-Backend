@@ -19,7 +19,7 @@ import java.util.List;
 @Configuration
 public class Config {
 
-    @Bean
+   // @Bean//////////////////////UWAJJAJAJ
     CommandLineRunner commandLineRunner(RoomRepository roomRepository, BookingRepository bookingRepository, UserRepository userRepository, PaymentRepository paymentRepository,
                                         RoleRepository roleRepository,  PasswordEncoder passwordEncoder) {
         return args -> {
