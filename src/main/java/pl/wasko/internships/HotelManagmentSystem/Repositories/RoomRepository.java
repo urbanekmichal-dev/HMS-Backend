@@ -10,4 +10,5 @@ public interface RoomRepository
 
     //@Query("Select r From Room r where r.id =?1 ")
     //Optional<Room> findRoomById(Long room_id);
+
 }

@@ -49,7 +49,7 @@ public class Config {
                     1,
                     1,
                     "Radzionków",
-                    "Piekny domek :)"
+                    "Piekny domek :)",true
                     );
 
             RoomEntity doublee = new RoomEntity(
@@ -61,7 +61,7 @@ public class Config {
                     1,
                     1,
                     "Zbrosławice",
-                    "Piekny apartament :)"
+                    "Piekny apartament :)",true
             );
 
             RoomEntity pentHouse = new RoomEntity(
@@ -73,7 +73,7 @@ public class Config {
                     1,
                     2,
                     "Gliwice",
-                    "Czysty penthouse"
+                    "Czysty penthouse",true
             );
 
 
@@ -87,7 +87,7 @@ public class Config {
                     1,
                     2,
                     "Gliwice",
-                    "Zadbana okolica i inne");
+                    "Zadbana okolica i inne",true);
 
             UserEntity michal = new UserEntity(
                 "Michał",

@@ -44,6 +44,7 @@ public class RoomDtoGet {
 
     @NotNull(message = "Description cannot be an empty value")
     private String description;
+    private Boolean visible;
 
 
     private List<BookingDTOslim> bookings;

@@ -1,6 +1,7 @@
 package pl.wasko.internships.HotelManagmentSystem.Services;
 
 import org.springframework.data.domain.Page;
+import pl.wasko.internships.HotelManagmentSystem.DTO.BookingDTO.BookingDtoGet;
 import pl.wasko.internships.HotelManagmentSystem.DTO.RoomDTO.RoomDtoGet;
 import pl.wasko.internships.HotelManagmentSystem.DTO.RoomDTO.RoomDtoPost;
 import pl.wasko.internships.HotelManagmentSystem.Entities.RoomEntity;
@@ -17,4 +18,5 @@ public interface RoomService {
     RoomEntity findRoomById(Long id) throws RoomNotFoundException;
     void deleteRoom(Long id) throws RoomNotFoundException;
     List<RoomDtoGet> getRooms(RoomPage roomPage, RoomSearchCriteria roomSearchCriteria);
+    void setVisibleRoom(Long id) throws RoomNotFoundException;
 }

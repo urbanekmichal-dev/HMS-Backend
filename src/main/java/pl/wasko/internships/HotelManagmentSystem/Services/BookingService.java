@@ -8,6 +8,7 @@ import pl.wasko.internships.HotelManagmentSystem.Exceptions.RoomNotFoundExceptio
 import pl.wasko.internships.HotelManagmentSystem.Exceptions.UserNotFoundException;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface BookingService {
@@ -18,4 +19,5 @@ public interface BookingService {
     void deleteBooking(Long id) throws BookingNotFoundException;
     List<BookingDtoGet> getBookingsByRoomId(Long id);
     List<BookingDtoGet> getBookingsByUserId(Long id);
+    List<LocalDate> getCheckInCheckOutDays(Long roomId);
 }

@@ -14,4 +14,6 @@ public class RoomSearchCriteria {
     private Integer roomsNumber;
     private Integer children;
     private String location;
+    private String checkIn;
+    private String checkOut;
 }

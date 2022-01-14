@@ -3,6 +3,7 @@ package pl.wasko.internships.HotelManagmentSystem.Controllers;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import pl.wasko.internships.HotelManagmentSystem.DTO.BookingDTO.BookingDtoGet;
 import pl.wasko.internships.HotelManagmentSystem.DTO.RoomDTO.RoomDtoGet;
 import pl.wasko.internships.HotelManagmentSystem.DTO.RoomDTO.RoomDtoPost;
 import pl.wasko.internships.HotelManagmentSystem.Entities.RoomEntity;
@@ -75,7 +76,7 @@ public class RoomController {
 
     //////////////////////////////////////////////////////////////////////
     @PostMapping("/rooms")
-    public ResponseEntity<List<RoomDtoGet>> getRooms(RoomPage roomPage,  @RequestBody RoomSearchCriteria roomSearchCriteria) {
+    public ResponseEntity<List<RoomDtoGet>> getRooms(RoomPage roomPage, @RequestBody RoomSearchCriteria roomSearchCriteria) {
         return new ResponseEntity<>(roomService.getRooms(roomPage,roomSearchCriteria), HttpStatus.OK);
     }
 
@@ -115,5 +116,13 @@ public class RoomController {
         httpHeaders.add(CONTENT_DISPOSITION, "attachment;File-Name=" + resource.getFilename());
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(Files.probeContentType(filePath)))
                 .headers(httpHeaders).body(resource);
+    }
+
+
+    @DeleteMapping(path = "/visible/{id}")
+    public ResponseEntity<RoomEntity> setVisibleRoom(
+            @PathVariable("id") Long id) throws RoomNotFoundException {
+        roomService.setVisibleRoom(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

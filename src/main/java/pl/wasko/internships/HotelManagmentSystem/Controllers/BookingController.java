@@ -1,5 +1,6 @@
 package pl.wasko.internships.HotelManagmentSystem.Controllers;
 
+import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import pl.wasko.internships.HotelManagmentSystem.DTO.BookingDTO.BookingDtoGet;
@@ -9,12 +10,14 @@ import pl.wasko.internships.HotelManagmentSystem.Exceptions.BookingNotFoundExcep
 import pl.wasko.internships.HotelManagmentSystem.Exceptions.DateException;
 import pl.wasko.internships.HotelManagmentSystem.Exceptions.RoomNotFoundException;
 import pl.wasko.internships.HotelManagmentSystem.Exceptions.UserNotFoundException;
+import pl.wasko.internships.HotelManagmentSystem.Securityy.exceptions.ApiRequestException;
 import pl.wasko.internships.HotelManagmentSystem.Services.BookingService;
 import pl.wasko.internships.HotelManagmentSystem.Services.impl.BookingServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -61,7 +64,11 @@ public class BookingController {
     public ResponseEntity<BookingEntity> deleteBoooking(@PathVariable("id") Long id) throws BookingNotFoundException {
         bookingService.deleteBooking(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
 
+    @GetMapping("/checkincheckout/{id}")
+    public ResponseEntity<List<LocalDate>> getCheckInCheckOutDays(@PathVariable("id") Long id){
+        return new ResponseEntity<>(bookingService.getCheckInCheckOutDays(id), HttpStatus.OK);
     }
 
 

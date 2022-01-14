@@ -30,6 +30,7 @@ public class RoomEntity {
     private Integer children;
     private String location;
     private String description;
+    private Boolean visible;
 
     @JsonManagedReference
     @OneToMany(mappedBy="room",cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
@@ -38,7 +39,7 @@ public class RoomEntity {
 
     public RoomEntity(RoomType roomType, Integer floor, Double price, String picture,
                       Integer adults, Integer roomsNumber, Integer children,
-                      String location, String description) {
+                      String location, String description,Boolean visible) {
         this.roomType = roomType;
         this.floor = floor;
         this.price = price;
@@ -48,5 +49,8 @@ public class RoomEntity {
         this.children = children;
         this.location = location;
         this.description = description;
+        this.visible = visible;
     }
+
+
 }
