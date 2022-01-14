@@ -5,6 +5,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
 import pl.wasko.internships.HotelManagmentSystem.Entities.BookingEntity;
 import pl.wasko.internships.HotelManagmentSystem.Entities.RoomEntity;
+import pl.wasko.internships.HotelManagmentSystem.Entities.RoomType;
 import pl.wasko.internships.HotelManagmentSystem.PagingSortingFiltration.model.RoomPage;
 import pl.wasko.internships.HotelManagmentSystem.PagingSortingFiltration.model.RoomSearchCriteria;
 
@@ -128,6 +129,27 @@ public class RoomCriteriaRepository {
                     criteriaBuilder.greaterThanOrEqualTo(roomEntityRoot.get("roomsNumber"),roomSearchCriteria.getRoomsNumber())
             );
         }
+
+        if (Objects.nonNull(roomSearchCriteria.getPriceFrom())) {
+            predicateList.add(
+                    criteriaBuilder.greaterThanOrEqualTo(roomEntityRoot.get("price"),roomSearchCriteria.getPriceFrom())
+            );
+        }
+
+        if (Objects.nonNull(roomSearchCriteria.getPriceTo())) {
+            predicateList.add(
+                    criteriaBuilder.lessThanOrEqualTo(roomEntityRoot.get("price"),roomSearchCriteria.getPriceTo())
+            );
+        }
+
+        if (Objects.nonNull(roomSearchCriteria.getRoomType())) {
+            predicateList.add(
+                    criteriaBuilder.equal(roomEntityRoot.get("roomType"), RoomType.values()[roomSearchCriteria.getRoomType()]  )
+            );
+        }
+
+
+
 
 
 
