@@ -1,14 +1,12 @@
 package pl.wasko.internships.HotelManagmentSystem.Services.impl;
 
 import lombok.AllArgsConstructor;
+import org.hibernate.validator.internal.util.privilegedactions.LoadClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.wasko.internships.HotelManagmentSystem.DTO.BookingDTO.BookingDtoGet;
 import pl.wasko.internships.HotelManagmentSystem.DTO.BookingDTO.BookingDtoPost;
-import pl.wasko.internships.HotelManagmentSystem.Entities.PaymentEntity;
-import pl.wasko.internships.HotelManagmentSystem.Entities.RoomEntity;
-import pl.wasko.internships.HotelManagmentSystem.Entities.UserEntity;
+import pl.wasko.internships.HotelManagmentSystem.Entities.*;
 import pl.wasko.internships.HotelManagmentSystem.Exceptions.BookingNotFoundException;
-import pl.wasko.internships.HotelManagmentSystem.Entities.BookingEntity;
 import pl.wasko.internships.HotelManagmentSystem.Exceptions.DateException;
 import pl.wasko.internships.HotelManagmentSystem.Exceptions.RoomNotFoundException;
 import pl.wasko.internships.HotelManagmentSystem.Exceptions.UserNotFoundException;
@@ -16,6 +14,10 @@ import pl.wasko.internships.HotelManagmentSystem.Mappers.BookingMapper;
 import pl.wasko.internships.HotelManagmentSystem.Repositories.BookingRepository;
 import org.springframework.stereotype.Service;
 import pl.wasko.internships.HotelManagmentSystem.Repositories.RoomRepository;
+import pl.wasko.internships.HotelManagmentSystem.Securityy.exceptions.ApiRequestException;
+import pl.wasko.internships.HotelManagmentSystem.Securityy.model.User;
+import pl.wasko.internships.HotelManagmentSystem.Securityy.repository.UserRepositoryy;
+import pl.wasko.internships.HotelManagmentSystem.Securityy.service.AuthService;
 import pl.wasko.internships.HotelManagmentSystem.Services.BookingService;
 import pl.wasko.internships.HotelManagmentSystem.Services.RoomService;
 import pl.wasko.internships.HotelManagmentSystem.Services.UserService;
@@ -28,6 +30,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -40,23 +43,36 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final RoomService roomService;
     private final UserService userService;
+    private final AuthService authService;
     private final BookingMapper bookingMapper;
-
+    
 
     public List<BookingDtoGet> getBookings() {
         return bookingMapper.bookingsToDTO(bookingRepository.findAll());
     }
 
+    public List<BookingDtoGet> getBookingsByRoomId(Long id){
+        return bookingMapper.bookingsToDTO(bookingRepository.findBookingsByRoomId(id));
+    }
+
+    public List<BookingDtoGet> getBookingsByUserId(Long id){
+        return bookingMapper.bookingsToDTO(bookingRepository.findBookingsByUserId(id));
+    }
 
     @Transactional
     public BookingDtoGet addBooking(BookingDtoPost bookingDtoPost) throws Exception {
         BookingEntity bookingEntity = new BookingEntity();
         PaymentEntity paymentEntity = new PaymentEntity();
+
         bookingEntity.setCheckIn(LocalDate.parse(bookingDtoPost.getCheckIn()));
         bookingEntity.setCheckOut(LocalDate.parse(bookingDtoPost.getCheckOut()));
 
-        RoomEntity roomEntity=roomService.findRoomById(Long.parseLong(bookingDtoPost.getRoom()));
-        UserEntity userEntity=userService.findUserById(Long.parseLong(bookingDtoPost.getUser()));
+        RoomEntity roomEntity=roomService.findRoomById(bookingDtoPost.getRoom().longValue());
+        RoleEnity roleEntity = new RoleEnity("admin");
+        UserEntity userEntity = new UserEntity("Michal","Urbanek","1212","michal","Urbanek");
+        userEntity.setRole(roleEntity);
+        //UserEntity userEntity=userService.findUserById(bookingDtoPost.getUser().longValue());
+        User owner = authService.findUserById(bookingDtoPost.getOwner().longValue());
 
         paymentEntity.setDate(LocalDate.now());
         long days=daysBetween(bookingDtoPost.getCheckIn(),bookingDtoPost.getCheckOut());
@@ -73,6 +89,7 @@ public class BookingServiceImpl implements BookingService {
             bookingEntity.setUser(userEntity);
             bookingEntity.setRoom(roomEntity);
             bookingEntity.setPayment(paymentEntity);
+            bookingEntity.setOwner(owner);
             userEntity.getBookings().add(bookingEntity);
             userEntity.getPayments().add(paymentEntity);
             paymentEntity.setBooking(bookingEntity);
@@ -82,7 +99,7 @@ public class BookingServiceImpl implements BookingService {
 
         }
       else {
-            throw new Exception("Room is reserved on the indicated date ");
+            throw new ApiRequestException("Pokój nie może zostać zarezerowoany w tych dniach");
         }
     }
 
@@ -145,9 +162,26 @@ public class BookingServiceImpl implements BookingService {
 
     }
 
+    public List<LocalDate> getCheckInCheckOutDays(Long roomId) {
+    List<LocalDate> days = new ArrayList<>();
+      List<BookingEntity>  bookingDtoGetList = bookingRepository.findBookingsByRoomId(roomId);
+        bookingDtoGetList.forEach((b) ->
+                days.addAll(dateRangeToDateArray(b.getCheckIn(),b.getCheckOut())));
+        return days;
+        }
 
 
-    
+
+    public List<LocalDate> dateRangeToDateArray(LocalDate checkIn, LocalDate checkOut){
+        List<LocalDate> blockedDays = new ArrayList<>();
+        while(checkIn.compareTo(checkOut)<0)
+        {
+        blockedDays.add(checkIn);
+        checkIn= checkIn.plusDays(1);
+        }
+        return blockedDays;
+
+    }
 
 
 }

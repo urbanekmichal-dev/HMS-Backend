@@ -24,6 +24,28 @@ public class RoomDtoGet {
     @NotNull(message = "Price cannot be an empty value")
     private Double price;
 
+    @NotNull(message = "Picture cannot be an empty value")
+    private String picture;
+
+
+
+
+    @NotNull(message = "Adults cannot be an empty value")
+    private Integer adults;
+
+    @NotNull(message = "Rooms amount cannot be an empty value")
+    private Integer roomsNumber;
+
+    @NotNull(message = "Adults cannot be an empty value")
+    private Integer children;
+
+    @NotNull(message = "Location cannot be an empty value")
+    private String location;
+
+    @NotNull(message = "Description cannot be an empty value")
+    private String description;
+    private Boolean visible;
+
 
     private List<BookingDTOslim> bookings;
 

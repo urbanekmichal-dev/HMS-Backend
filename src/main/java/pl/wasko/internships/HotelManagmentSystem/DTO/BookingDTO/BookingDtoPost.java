@@ -17,8 +17,10 @@ public class BookingDtoPost {
 
     private String checkOut;
 
-    private String room;
+    private Integer room;
 
-    private String user;
+    private Integer user;
+
+    private Integer owner;
 
 }

@@ -11,12 +11,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.wasko.internships.HotelManagmentSystem.Securityy.dto.AuthenticationResponse;
-import pl.wasko.internships.HotelManagmentSystem.Securityy.dto.LoginRequest;
-import pl.wasko.internships.HotelManagmentSystem.Securityy.dto.RefreshTokenRequest;
-import pl.wasko.internships.HotelManagmentSystem.Securityy.dto.RegisterRequest;
+import pl.wasko.internships.HotelManagmentSystem.DTO.UserDTO.UserDtoGet;
+import pl.wasko.internships.HotelManagmentSystem.DTO.UserDTO.UserDtoPost;
+import pl.wasko.internships.HotelManagmentSystem.Entities.RoleEnity;
+import pl.wasko.internships.HotelManagmentSystem.Entities.UserEntity;
+import pl.wasko.internships.HotelManagmentSystem.Exceptions.BookingNotFoundException;
+import pl.wasko.internships.HotelManagmentSystem.Exceptions.RoleNotFoundException;
+import pl.wasko.internships.HotelManagmentSystem.Exceptions.UserNotFoundException;
+import pl.wasko.internships.HotelManagmentSystem.Securityy.dto.*;
 import pl.wasko.internships.HotelManagmentSystem.Securityy.exceptions.SpringRedditException;
+import pl.wasko.internships.HotelManagmentSystem.Securityy.mappers.CustomerMapper;
 import pl.wasko.internships.HotelManagmentSystem.Securityy.model.NotificationEmail;
+import pl.wasko.internships.HotelManagmentSystem.Securityy.model.Role;
 import pl.wasko.internships.HotelManagmentSystem.Securityy.model.User;
 import pl.wasko.internships.HotelManagmentSystem.Securityy.model.VerificationToken;
 
@@ -26,6 +32,8 @@ import pl.wasko.internships.HotelManagmentSystem.Securityy.security.JwtProvider;
 
 
 import java.time.Instant;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -41,6 +49,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
+    private final CustomerMapper customerMapper;
 
     public void signup(RegisterRequest registerRequest) {
         User user = new User();
@@ -48,12 +57,21 @@ public class AuthService {
         user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setCreated(Instant.now());
-        user.setEnabled(false);
+
+        ///////////////////////////////Przełączyć na false żeby miałą sens weryfikacją1!!!!!1
+        user.setEnabled(true);
 
         user.setFirstname(registerRequest.getFirstname());
         user.setLastname(registerRequest.getLastname());
         user.setPhone(registerRequest.getPhone());
         user.setAddress(registerRequest.getAddress());
+        user.setRole(Role.values()[registerRequest.getRole()]);
+        user.setImage(registerRequest.getImage());
+
+        boolean userExists = userRepository
+                .findByUsername(registerRequest.getUsername())
+                .isPresent();
+        if(userExists) throw new IllegalStateException("Username already taken");
 
         userRepository.save(user);
 
@@ -61,7 +79,8 @@ public class AuthService {
         mailService.sendMail(new NotificationEmail("Please Activate your Account",
                 user.getEmail(), "Thank you for signing up to HotelManagementSystem, " +
                 "please click on the below url to activate your account : " +
-                "http://localhost:8083/api/auth/accountVerification/" + token));
+                //"http://localhost:8083/api/auth/accountVerification/" + token));
+                "http://hotelmanagementsystem-env.eba-mc24nyan.us-east-1.elasticbeanstalk.com/api/auth/accountVerification/"+ token));
     }
 
     @Transactional(readOnly = true)
@@ -99,11 +118,14 @@ public class AuthService {
                 loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String token = jwtProvider.generateToken(authenticate);
+        User user = userRepository.findByUsername(loginRequest.getUsername()).orElseThrow(() -> new SpringRedditException("User not found with name - " + loginRequest.getUsername()));
         return AuthenticationResponse.builder()
                 .authenticationToken(token)
                 .refreshToken(refreshTokenService.generateRefreshToken().getToken())
                 .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
                 .username(loginRequest.getUsername())
+                .userId((user.getUserId()))
+                .role(user.getRole())
                 .build();
     }
 
@@ -122,4 +144,68 @@ public class AuthService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
     }
+
+    ///////////////////////USER!!!!!!!!!!!!!!!!!!!!!!!!1
+
+    public UserResponse getUserByUsername(String username) throws BookingNotFoundException {
+        return customerMapper.userToDTO(userRepository.findByUsername(username).orElseThrow(
+                ()-> new BookingNotFoundException("User with username: "+ username +"was not found")));
+    }
+
+    public UserResponse updateUser(RegisterRequest userResponse) throws UserNotFoundException {
+        User userFind=userRepository.findByUsername(userResponse.getUsername()) .orElseThrow(() -> new UserNotFoundException(
+                "User with username " + userResponse.getUsername() + " does not exist!"
+        ));
+
+        if (userResponse.getFirstname()!= null &&
+                userResponse.getFirstname().length() > 0 &&
+                !Objects.equals((userFind.getFirstname()), userResponse.getFirstname())) {
+            userFind.setFirstname(userResponse.getFirstname());
+        }
+
+        if (userResponse.getLastname()!= null &&
+                userResponse.getLastname().length() > 0 &&
+                !Objects.equals((userFind.getLastname()), userResponse.getLastname())) {
+            userFind.setLastname(userResponse.getLastname());
+        }
+
+        if (userResponse.getPhone()!= null &&
+                userResponse.getPhone().length() > 0 &&
+                !Objects.equals((userFind.getPhone()), userResponse.getPhone())) {
+            userFind.setPhone(userResponse.getPhone());
+        }
+
+        if (userResponse.getAddress()!= null &&
+                userResponse.getAddress().length() > 0 &&
+                !Objects.equals((userFind.getAddress()), userResponse.getAddress())) {
+            userFind.setAddress(userResponse.getAddress());
+        }
+
+        if (userResponse.getEmail()!= null &&
+                userResponse.getEmail().length() > 0 &&
+                !Objects.equals((userFind.getEmail()), userResponse.getEmail())) {
+            userFind.setEmail(userResponse.getEmail());
+        }
+
+        return customerMapper.userToDTO(userFind);
+    }
+
+    public User findUserById(Long id) throws UserNotFoundException {
+
+        return userRepository.findUserById(id).orElseThrow(() -> new UserNotFoundException(
+                "User with id " + id + " does not exist")) ;
+    }
+
+    public List<UserResponse> getUsers() {
+        return customerMapper.usersToDTO(userRepository.findAll());
+    }
+
+
+    public void deleteUser(Long id) throws UserNotFoundException {
+        User exist = userRepository.findUserById(id).orElseThrow(() -> new UserNotFoundException(
+                "User with id " + id + " does not exist"));
+        exist.setEnabled(!exist.getEnabled());
+        userRepository.save(exist);
+    }
+
 }
